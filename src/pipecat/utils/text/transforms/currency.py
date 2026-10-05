@@ -21,7 +21,11 @@ _CURRENCY_MAP: dict[str, tuple[str, str, str | None, str | None]] = {
     "₹": ("rupee", "rupees", "paisa", "paise"),
 }
 
-_CURRENCY_RE = re.compile(r"([€£¥₹\$])\s*(\d{1,3}(?:,\d{3})*|\d+)\b(?:\.(\d+))?")
+# The whole amount accepts Indian lakh/crore grouping ("₹1,00,000") as well as
+# thousands grouping ("$1,000,000").
+_CURRENCY_RE = re.compile(
+    r"([€£¥₹\$])\s*(\d{1,2}(?:,\d{2})+,\d{3}|\d{1,3}(?:,\d{3})*|\d+)\b(?:\.(\d+))?"
+)
 
 
 def _amount_to_words(n: float, singular: str, plural: str) -> str:
